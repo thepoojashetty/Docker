@@ -28,7 +28,7 @@ services:
       - sql
   python-server:
     image: abc
-    command: bash -c "cd testing && python manage.py runserver 8888"
+    command: bash -c "cd testing && python manage.py makemigrations && gunicorn testing.wsgi:application --bind 0:8888"
     volumes: [".:/usr/src/app"]
     ports: ["9999:8888"]
     depends_on:
@@ -36,7 +36,8 @@ services:
     networks:
       admin:
         ipv4_address: 10.10.10.5
-
+    depends_on:
+      - sql
 networks:
   admin:
     driver: bridge
