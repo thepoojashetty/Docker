@@ -4,3 +4,18 @@ services:
     image: abc
     command: bash -c "django-admin startproject testing"
     volumes: [".:/usr/src/app"]
+  python-sql:
+    image: mysql
+    volumes: ["./data:/var/lib/mysql"]
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: workshop
+      MYSQL_USER: pooja
+      MYSQL_PASSWORD: pooja
+  python-server:
+    image: abc
+    command: bash -c "cd testing && python manage.py runserver 8888"
+    volumes: [".:/usr/src/app"]
+    ports: ["9999:8888"]
+    depends_on:
+      - python-sql
